@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const app = express().use(bodyParser.json());
 const { WebhookClient } = require("dialogflow-fulfillment");
+const { Suggestion, Payload } = require('dialogflow-fulfillment');
+
 
 app.get("/", (request, response) => {
     response.send("Hello!");
@@ -11,16 +13,163 @@ app.get("/", (request, response) => {
 
 app.post("/webhook", (request, response) => {
     const _agent = new WebhookClient({ request, response });
-    console.log("Dialogflow Request body: " + JSON.stringify(request.body));
+    const body = JSON.stringify(request.body);
+    console.log("Dialogflow Request body: " + body);
 
-    function welcome(agent) {
+    // function Welcome(agent) {
+    //     var payload = {
+    //         "facebook": {
+    //             "text": "Welcome to my agent!",
+    //             "quick_replies": [
+    //                 {
+    //                     "content_type": "text",
+    //                     "payload": "reply1",
+    //                     "title": "reply 1"
+    //                 }
+    //             ]
+    //         }
+    //     }
+    //     agent.add(new Payload(agent.FACEBOOK, payload, { rawPayload: true, sendAsMessage: true }))
+
+    // }
+
+
+    function Contact_Details(agent) {
+        const name = request.body.queryResult.parameters.person.name
+        const email = request.body.queryResult.parameters.email
+        const number = request.body.queryResult.parameters.number
+        // console.log("name is",name, "email is",email, "phone number is",number)
+        // console.log(request.body.queryResult, "query result")
         agent.add(
-            "Do you have any other comments about on-demand video streaming services?"
+            `Thank you ${name}, kindly type any number from 1 to 6 to play the game `
         );
     }
 
+    function Dice(agent) {
+        var diceNum = request.body.queryResult.parameters.diceNum
+        // diceNum = Math.floor(Math.random() * 6) + 1;
+        console.log(diceNum, "dice number is")
+        if (diceNum === 1) {
+            agent.add(
+                `Question for number 1 is `
+            );
+            agent.add(
+                `click on below link to watch the video to solve this problem: `
+            );
+            // agent.add(
+            //     `https://www.youtube.com/ `
+            // );   
+
+
+        }
+        else if (diceNum === 2) {
+            agent.add(
+                `Question for number 2 is `
+            );
+            agent.add(
+                `click on below link to watch the video to solve this problem: `
+            );
+            agent.add(
+                `https://www.youtube.com/ `
+            );
+        }
+        else if (diceNum === 3) {
+            agent.add(
+                `Question for number 3 is `
+            );
+            agent.add(
+                `click on below link to watch the video to solve this problem: `
+            );
+            agent.add(
+                `https://www.youtube.com/ `
+            );
+        }
+        else if (diceNum === 4) {
+            agent.add(
+                `Question for number 4 is `
+            );
+            agent.add(
+                `click on below link to watch the video to solve this problem: `
+            );
+            agent.add(
+                `https://www.youtube.com/ `
+            );
+        }
+        else if (diceNum === 5) {
+            agent.add(
+                `Question for number 5 is `
+            );
+            agent.add(
+                `click on below link to watch the video to solve this problem: `
+            );
+            agent.add(
+                `https://www.youtube.com/ `
+            );
+        }
+        else if (diceNum === 6) {
+            agent.add(
+                `Question for number 6 is `
+            );
+            agent.add(
+                `click on below link to watch the video to solve this problem: `
+            );
+            agent.add(
+                `https://www.youtube.com/ `
+            );
+        }
+        else {
+            agent.add(
+                `you have selected ${diceNum}, which doesn't come between 1 to 6 :( `
+            );
+
+        }
+        // console.log("diceNum is",request.body.queryResult)
+        // console.log(request.body.queryResult, "query result")
+        // agent.add(
+        //     `You have selected ${diceNum} number`
+        // );
+    }
+
+
+    function fallback(agent) {
+        var payload = {
+            "facebook": {
+                "text": "What would like to do next",
+                "quick_replies": [
+                    {
+                        "content_type": "text",
+                        "payload": "reply1",
+                        "title": "Continue the game"
+                    },
+                    {
+                        "content_type": "text",
+                        "payload": "reply2",
+                        "title": "Finish the game"
+                    }
+                ]
+            }
+        }
+        agent.add(new Payload(agent.FACEBOOK, payload, { rawPayload: true, sendAsMessage: true }))
+
+    }
+
+    function finish(agent) {
+        Num = Math.floor(Math.random() * 22) + 1;
+        agent.add(
+            `Congratulations, you have scored ${Num}  `
+        );
+    }
+    
+
+
     let intents = new Map();
-    intents.set("Default Welcome Intent", Welcome);
+    // intents.set("Default Welcome Intent", Welcome);
+    intents.set("Contact_Details", Contact_Details);
+    intents.set("Dice", Dice);
+    intents.set("Default Fallback Intent", fallback);
+    intents.set("finish", finish);
+
+
 
     _agent.handleRequest(intents);
 });
