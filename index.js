@@ -6,6 +6,7 @@ const app = express().use(bodyParser.json());
 const { WebhookClient } = require("dialogflow-fulfillment");
 const { Suggestion, Payload } = require('dialogflow-fulfillment');
 
+var port = process.env.PORT || 3000;
 
 app.get("/", (request, response) => {
     response.send("Hello!");
@@ -174,6 +175,6 @@ app.post("/webhook", (request, response) => {
     _agent.handleRequest(intents);
 });
 
-app.listen(3000, () => {
-    console.log("server running on port " + 3000);
+app.listen(port, () => {
+    console.log("server running on port " + port);
 });
