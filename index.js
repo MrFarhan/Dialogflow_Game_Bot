@@ -48,7 +48,7 @@ app.post("/webhook", (request, response) => {
 
     function Dice(agent) {
         var diceNum = request.body.queryResult.parameters.diceNum
-        // diceNum = Math.floor(Math.random() * 6) + 1;
+        diceNum = Math.floor(Math.random() * 6) + 1;
         console.log(diceNum, "dice number is")
         if (diceNum === 1) {
             agent.add(
