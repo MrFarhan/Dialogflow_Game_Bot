@@ -1,10 +1,9 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const app = express().use(bodyParser.json());
 const { WebhookClient } = require("dialogflow-fulfillment");
-const { Suggestion, Payload } = require('dialogflow-fulfillment');
+const { Payload } = require('dialogflow-fulfillment');
 
 var port = process.env.PORT || 3000;
 
@@ -39,8 +38,6 @@ app.post("/webhook", (request, response) => {
         const name = request.body.queryResult.parameters.person.name
         const email = request.body.queryResult.parameters.email
         const number = request.body.queryResult.parameters.number
-        // console.log("name is",name, "email is",email, "phone number is",number)
-        // console.log(request.body.queryResult, "query result")
         agent.add(
             `Thank you ${name}, kindly type any number from 1 to 6 to play the game `
         );
@@ -57,9 +54,6 @@ app.post("/webhook", (request, response) => {
             agent.add(
                 `click on below link to watch the video to solve this problem: `
             );
-            // agent.add(
-            //     `https://www.youtube.com/ `
-            // );   
 
 
         }
@@ -124,11 +118,6 @@ app.post("/webhook", (request, response) => {
             );
 
         }
-        // console.log("diceNum is",request.body.queryResult)
-        // console.log(request.body.queryResult, "query result")
-        // agent.add(
-        //     `You have selected ${diceNum} number`
-        // );
     }
 
 
